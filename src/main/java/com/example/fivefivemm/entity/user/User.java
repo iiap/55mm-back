@@ -29,7 +29,6 @@ public class User {
 
     private Date lastLoginTime;
 
-    @Column(nullable = false)
     private String name;
 
     private String sex;
@@ -51,6 +50,21 @@ public class User {
     private String weChat;
 
     private String avatar;
+
+    public User() {
+
+    }
+
+    public User(String account, String password) {
+        this.account = account;
+        this.password = password;
+    }
+
+    public User(String account, String password, String email) {
+        this.account = account;
+        this.password = password;
+        this.email = email;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -170,5 +184,10 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    @Override
+    public String toString() {
+        return "[userId:" + userId + ",name:" + name + "]";
     }
 }
