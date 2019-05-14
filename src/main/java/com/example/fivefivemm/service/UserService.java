@@ -73,6 +73,7 @@ public interface UserService {
      * failed message
      * 1.user对象为空
      * 2.不存在的用户
+     * 3.头像地址为空
      */
     Result updateAvatar(User user);
 

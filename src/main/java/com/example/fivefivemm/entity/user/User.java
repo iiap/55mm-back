@@ -51,6 +51,8 @@ public class User {
 
     private String avatar;
 
+    private String introduction;
+
     public User() {
 
     }
@@ -58,6 +60,11 @@ public class User {
     public User(String account, String password) {
         this.account = account;
         this.password = password;
+    }
+
+    public User(Integer userId, String avatar) {
+        this.userId = userId;
+        this.avatar = avatar;
     }
 
     public User(String account, String password, String email) {
@@ -184,6 +191,14 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
     @Override

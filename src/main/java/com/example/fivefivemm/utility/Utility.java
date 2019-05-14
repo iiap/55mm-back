@@ -1,52 +1,25 @@
 package com.example.fivefivemm.utility;
 
+import com.example.fivefivemm.entity.user.User;
 import net.sf.json.JSONObject;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 /**
  * 工具类
- * 2019.3.7
  *
  * @author tiga
  * @version 1.0
+ * @since 2019年5月14日17:13:28
  */
 public class Utility {
-
-    /**
-     * 网页输出信息
-     *
-     * @param response response
-     * @param alert    message
-     * @param href     link
-     */
-    public static void output(HttpServletResponse response, String alert, String href) {
-        try {
-            response.setContentType("text/html; charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.flush();
-            out.println("<script>");
-            out.println("alert('" + alert + "');");
-            if (href.equals("")) {
-                out.println("history.back();");
-            } else {
-                out.println("location.href='" + href + "';");
-            }
-            out.println("location.href='" + href + "';");
-            out.println("</script>");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * md5加密算法
@@ -74,28 +47,28 @@ public class Utility {
         }
     }
 
-    /**
-     * 生成10位随机密码
-     *
-     * @return 生成的随机密码
-     */
-    public static String randomPassword() {
-        String val = "";
-        Random random = new Random();
-        //length为几位密码
-        for (int i = 0; i < 10; i++) {
-            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
-            //输出字母还是数字
-            if ("char".equalsIgnoreCase(charOrNum)) {
-                //输出是大写字母还是小写字母
-                int temp = random.nextInt(2) % 2 == 0 ? 65 : 97;
-                val += (char) (random.nextInt(26) + temp);
-            } else if ("num".equalsIgnoreCase(charOrNum)) {
-                val += String.valueOf(random.nextInt(10));
-            }
-        }
-        return val;
-    }
+//    /**
+//     * 生成10位随机密码
+//     *
+//     * @return 生成的随机密码
+//     */
+//    public static String randomPassword() {
+//        String val = "";
+//        Random random = new Random();
+//        //length为几位密码
+//        for (int i = 0; i < 10; i++) {
+//            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
+//            //输出字母还是数字
+//            if ("char".equalsIgnoreCase(charOrNum)) {
+//                //输出是大写字母还是小写字母
+//                int temp = random.nextInt(2) % 2 == 0 ? 65 : 97;
+//                val += (char) (random.nextInt(26) + temp);
+//            } else if ("num".equalsIgnoreCase(charOrNum)) {
+//                val += String.valueOf(random.nextInt(10));
+//            }
+//        }
+//        return val;
+//    }
 
     /**
      * 业务Json构造
@@ -112,9 +85,9 @@ public class Utility {
         return jsonObject.toString();
     }
 
-    /**
-     * 单个博客信息Json构造
-     */
+//    /**
+//     * 单个博客信息Json构造
+//     */
 //    public static Map BlogBody(Blog blog) {
 //        Map<String, Object> blogMap = new HashMap<>();
 //        Map<String, Object> authorMap = new HashMap<>();
@@ -151,9 +124,9 @@ public class Utility {
 //        return blogMap;
 //    }
 
-    /**
-     * 多个博客信息Json构造
-     */
+//    /**
+//     * 多个博客信息Json构造
+//     */
 //    public static JSONArray BlogListBody(List<Blog> blogList) {
 //        if (blogList != null && blogList.size() > 0) {
 //            JSONArray blogArray = new JSONArray();
@@ -167,54 +140,31 @@ public class Utility {
 //    }
 
     /**
-     * 单个评论信息Json构造
-     */
-//    public static Map RemarkBody(Remark remark) {
-//        Map<String, Object> remarkMap = new HashMap<>();
-//        Map<String, Object> authorMap = new HashMap<>();
-//        remarkMap.put("remarkId", remark.getRemarkId());
-//        remarkMap.put("content", remark.getContent());
-//        if (remark.getCreateTime() != null) {
-//            remarkMap.put("createTime", remark.getCreateTime().toString());
-//        } else {
-//            remarkMap.put("createTime", getNowDate());
-//        }
-//        remarkMap.put("approve", remark.getApprove());
-//        authorMap.put("name", remark.getAuthor().getName());
-//        authorMap.put("userId", remark.getAuthor().getUserId());
-//        remarkMap.put("author", authorMap);
-//        return remarkMap;
-//    }
-
-    /**
      * 单个用户信息Json构造
      */
-//    public static Map UserInformationBody(UserInformation userInformation) {
-//        Map<String, Object> userInformationMap = new HashMap<>();
-//        userInformationMap.put("userId", userInformation.getUserId());
-//        userInformationMap.put("name", userInformation.getName());
-//        userInformationMap.put("sex", userInformation.getSex());
-//        userInformationMap.put("age", userInformation.getAge());
-//        userInformationMap.put("email", userInformation.getEmail());
-//        userInformationMap.put("phone", userInformation.getPhone());
-//        userInformationMap.put("qq", userInformation.getQq());
-//        userInformationMap.put("hobby", userInformation.getHobby());
-//        userInformationMap.put("profession", userInformation.getWork());
-//        userInformationMap.put("address", userInformation.getHome());
-//        userInformationMap.put("school", userInformation.getSchool());
-//        userInformationMap.put("introduction", userInformation.getIntroduction());
-//        userInformationMap.put("weChat", userInformation.getWeChat());
-//        if (userInformation.getBirthday() != null) {
-//            userInformationMap.put("birthday", userInformation.getBirthday().toString().substring(0, 10));
-//        }
-//        userInformationMap.put("headPortrait", userInformation.getHeadPortrait());
-//        return userInformationMap;
-//    }
+    public static Map userBody(User user) {
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("userId", user.getUserId());
+        userMap.put("name", user.getName());
+        userMap.put("sex", user.getSex());
+        userMap.put("age", user.getAge());
+        userMap.put("email", user.getEmail());
+        userMap.put("phone", user.getPhone());
+        userMap.put("qq", user.getQq());
+        userMap.put("introduction", user.getIntroduction());
+        userMap.put("weChat", user.getWeChat());
+        userMap.put("avatar", user.getAvatar());
+        userMap.put("type", user.getType());
+        if (user.getBirthday() != null) {
+            userMap.put("birthday", user.getBirthday().toString().substring(0, 10));
+        }
+        return userMap;
+    }
 
     /**
      * 头像地址构造
      */
-    public static String avatarAddress(String serverAddress, String fileName) {
+    private static String avatarAddress(String serverAddress, String fileName) {
         return serverAddress + "avatar/" + fileName;
     }
 
@@ -261,6 +211,26 @@ public class Utility {
         Date dNow = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return ft.format(dNow);
+    }
+
+    /**
+     * 保存头像
+     *
+     * @param file 头像图片
+     * @return 头像图片地址
+     */
+    public static String saveAvatar(MultipartFile file) {
+        if (file == null) {
+            return null;
+        }
+        String fileName = UUID.randomUUID() + file.getOriginalFilename();
+        try {
+            file.transferTo(new File(Constants.avatarPath + fileName));
+            return avatarAddress(Constants.serverAddress, fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

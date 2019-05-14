@@ -150,6 +150,9 @@ public class UserServiceImplements implements UserService {
     @Transactional
     public Result updateAvatar(User user) {
         if (user != null) {
+            if (user.getAvatar() == null) {
+                return new Result(Result.failed, "头像地址为空");
+            }
             User existUser = userRepository.findByUserId(user.getUserId());
             if (existUser != null) {
                 existUser.setAvatar(user.getAvatar());

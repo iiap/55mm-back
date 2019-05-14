@@ -33,8 +33,10 @@ public class Action {
     @JoinColumn(name = "authorId", referencedColumnName = "userId")
     private User author;
 
+    @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
     private Integer cost;
 
     public Integer getActionId() {
