@@ -22,4 +22,14 @@ public interface Constants {
 //     */
 //    String serverAddress = "http://58.87.73.16:8888/";
 
+    /**
+     * 默认头像(本地)
+     */
+    String defaultAvatar = "http://127.0.0.1:8888/avatar/default-avatar.png";
+
+//    /**
+//     * 默认头像(生产环境)
+//     */
+//    String defaultAvatar = "http://58.87.73.16:8888/avatar/default-avatar.png";
+
 }

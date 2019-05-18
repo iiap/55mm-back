@@ -3,6 +3,7 @@ package com.example.fivefivemm.service.Implements;
 import com.example.fivefivemm.entity.user.User;
 import com.example.fivefivemm.repository.UserRepository;
 import com.example.fivefivemm.service.UserService;
+import com.example.fivefivemm.utility.Constants;
 import com.example.fivefivemm.utility.Result;
 import com.example.fivefivemm.utility.Utility;
 import org.apache.logging.log4j.LogManager;
@@ -49,6 +50,8 @@ public class UserServiceImplements implements UserService {
                 return new Result(Result.failed, "该邮箱已被注册");
             } else {
                 user.setPassword(Utility.md5(user.getPassword()));
+                user.setName(user.getAccount());
+                user.setAvatar(Constants.defaultAvatar);
                 userRepository.save(user);
                 logger.info("注册新用户:" + user.getAccount());
                 return new Result(Result.success);
@@ -67,7 +70,7 @@ public class UserServiceImplements implements UserService {
                 if (existUser.getPassword().equals(Utility.md5(user.getPassword()))) {
                     existUser.setLastLoginTime(new Date());
                     logger.info("登录用户:" + existUser.getAccount());
-                    return new Result(Result.success, existUser.getUserId());
+                    return new Result(Result.success, existUser);
                 } else {
                     return new Result(Result.failed, "密码错误");
                 }
@@ -109,6 +112,7 @@ public class UserServiceImplements implements UserService {
                 existUser.setSex(user.getSex());
                 existUser.setType(user.getType());
                 existUser.setWeChat(user.getWeChat());
+                existUser.setIntroduction(user.getIntroduction());
                 logger.info("修改用户信息:" + existUser.getUserId());
                 return new Result(Result.success);
             } else {
