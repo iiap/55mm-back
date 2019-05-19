@@ -1,7 +1,10 @@
 package com.example.fivefivemm.service;
 
+import com.example.fivefivemm.entity.action.Action;
 import com.example.fivefivemm.entity.user.User;
 import com.example.fivefivemm.utility.Result;
+
+import java.util.Set;
 
 public interface UserService {
 
@@ -76,5 +79,13 @@ public interface UserService {
      * 3.头像地址为空
      */
     Result updateAvatar(User user);
+
+    /**
+     * 获取用户的动态
+     *
+     * @param userId 用户Id
+     * @return 用户的动态集合或null
+     */
+    Set<Action> RetrieveUserActions(Integer userId);
 
 }

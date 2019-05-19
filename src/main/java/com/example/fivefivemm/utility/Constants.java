@@ -10,7 +10,7 @@ public interface Constants {
     /**
      * 约拍信息图片保存地址
      */
-    String imagePath = "F:/55mm/image/";
+    String actionPath = "F:/55mm/action/";
 
     /**
      * 本地图片服务器
@@ -31,5 +31,15 @@ public interface Constants {
 //     * 默认头像(生产环境)
 //     */
 //    String defaultAvatar = "http://58.87.73.16:8888/avatar/default-avatar.png";
+
+    /**
+     * 本地图片存储地址
+     */
+    String imageAddress = "http://127.0.0.1:8888/action/";
+
+//    /**
+//     * 生产环境图片存储地址
+//     */
+//    String imageAddress = "http://58.87.73.16:8888/action/";
 
 }

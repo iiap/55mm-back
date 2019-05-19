@@ -1,8 +1,11 @@
 package com.example.fivefivemm.entity.user;
 
+import com.example.fivefivemm.entity.action.Action;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 用户表
@@ -52,6 +55,11 @@ public class User {
     private String avatar;
 
     private String introduction;
+
+    //EAGER急加载,加载用户信息就加载这条属性
+    //LAZY懒加载,在加载该属性时加上事务注解，已存在的属性不用加载
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = Action.class, mappedBy = "author")
+    private Set<Action> myActions;
 
     public User() {
 
@@ -199,6 +207,14 @@ public class User {
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public Set<Action> getMyActions() {
+        return myActions;
+    }
+
+    public void setMyActions(Set<Action> myActions) {
+        this.myActions = myActions;
     }
 
     @Override

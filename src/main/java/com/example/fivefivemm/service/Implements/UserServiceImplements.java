@@ -1,5 +1,6 @@
 package com.example.fivefivemm.service.Implements;
 
+import com.example.fivefivemm.entity.action.Action;
 import com.example.fivefivemm.entity.user.User;
 import com.example.fivefivemm.repository.UserRepository;
 import com.example.fivefivemm.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 用户业务类
@@ -168,5 +170,21 @@ public class UserServiceImplements implements UserService {
         } else {
             return new Result(Result.failed, "user对象为空");
         }
+    }
+
+    @Override
+    @Transactional
+    public Set<Action> RetrieveUserActions(Integer userId) {
+        if (userId == null) {
+            return null;
+        }
+        User existUser = userRepository.findByUserId(userId);
+        if (existUser == null) {
+            return null;
+        }
+        Set<Action> userActions = existUser.getMyActions();
+        userActions.size();
+        logger.info("获取用户动态: 用户Id:" + existUser.getUserId() + ":" + userActions);
+        return userActions;
     }
 }

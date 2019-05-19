@@ -96,4 +96,9 @@ public class UserServiceTest extends AbstractTransactionalJUnit4SpringContextTes
             System.out.println(updateAvatarResult.getMessage());
         }
     }
+
+    @Test
+    public void RetrieveUserActionsTest(){
+        System.out.println(userService.RetrieveUserActions(3));
+    }
 }

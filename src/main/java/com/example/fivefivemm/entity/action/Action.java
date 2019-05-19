@@ -39,6 +39,23 @@ public class Action {
     @Column(nullable = false)
     private Integer cost;
 
+    public Action() {
+
+    }
+
+    public Action(User author, Integer actionId) {
+        this.author = author;
+        this.actionId = actionId;
+    }
+
+    public Action(User user, String title, String address, Integer cost, String content) {
+        this.author = user;
+        this.title = title;
+        this.address = address;
+        this.cost = cost;
+        this.content = content;
+    }
+
     public Integer getActionId() {
         return actionId;
     }
@@ -93,5 +110,11 @@ public class Action {
 
     public void setCost(Integer cost) {
         this.cost = cost;
+    }
+
+    @Override
+    public String toString() {
+        return "[Action:actionId:" + actionId + ",title:" + title + ",address:" + address + ",cost:" + cost + ",content:" + content + ",author:" + author.getUserId() +
+                "]";
     }
 }

@@ -1,6 +1,8 @@
 package com.example.fivefivemm.utility;
 
+import com.example.fivefivemm.entity.action.Action;
 import com.example.fivefivemm.entity.user.User;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,8 +11,9 @@ import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 工具类
@@ -85,59 +88,50 @@ public class Utility {
         return jsonObject.toString();
     }
 
-//    /**
-//     * 单个博客信息Json构造
-//     */
-//    public static Map BlogBody(Blog blog) {
-//        Map<String, Object> blogMap = new HashMap<>();
-//        Map<String, Object> authorMap = new HashMap<>();
-//        JSONArray jsonArray = new JSONArray();
-//        blogMap.put("blogId", blog.getBlogId());
-//        blogMap.put("title", blog.getTitle());
-//        blogMap.put("content", blog.getContent());
-//        blogMap.put("summary", blog.getSummary());
-//        blogMap.put("createTime", blog.getCreateTime().toString());
-//        if (blog.getLastModifyTime() != null) {
-//            blogMap.put("lastModifyTime", blog.getLastModifyTime().toString());
-//        } else {
-//            blogMap.put("lastModifyTime", blog.getLastModifyTime());
-//        }
-//        blogMap.put("approve", blog.getApprove());
-//        blogMap.put("browse", blog.getBrowse());
-//        blogMap.put("collect", blog.getCollect());
-//        authorMap.put("name", blog.getAuthor().getName());
-//        authorMap.put("userId", blog.getAuthor().getUserId());
-//        blogMap.put("author", authorMap);
-//        Set<Remark> remarkSet = blog.getRemarks();
-//        //对评论集合进行排序
-//        List<Remark> remarkList = new ArrayList<>(remarkSet);
-//        Collections.sort(remarkList, new Comparator<Remark>() {
-//            @Override
-//            public int compare(Remark o1, Remark o2) {
-//                return o1.getRemarkId() > o2.getRemarkId() ? -1 : 1;
-//            }
-//        });
-//        for (Remark remark : remarkList) {
-//            jsonArray.add(RemarkBody(remark));
-//        }
-//        blogMap.put("remarks", jsonArray);
-//        return blogMap;
-//    }
+    /**
+     * 单个动态信息Json构造
+     */
+    public static Map ActionBody(Action action) {
+        Map<String, Object> actionMap = new HashMap<>();
+        Map<String, Object> authorMap = new HashMap<>();
+        JSONArray imageArray = new JSONArray();
+        actionMap.put("actionId", action.getActionId());
+        actionMap.put("title", action.getTitle());
+        actionMap.put("cost", action.getCost());
+        actionMap.put("content", action.getContent());
+        actionMap.put("address", action.getAddress());
+        actionMap.put("time", action.getCreateTime().toString());
+        //获取内容中的图片
+        String images[] = getImageAddress(action.getContent());
+        if (images.length != 0) {
+            for (String img : images) {
+                imageArray.add(Constants.imageAddress + img);
+            }
+            actionMap.put("images", imageArray);
+        }
+        authorMap.put("name", action.getAuthor().getName());
+        authorMap.put("userId", action.getAuthor().getUserId());
+        authorMap.put("avatar", action.getAuthor().getAvatar());
+        authorMap.put("type", action.getAuthor().getType());
+        authorMap.put("sex", action.getAuthor().getSex());
+        actionMap.put("author", authorMap);
+        return actionMap;
+    }
 
-//    /**
-//     * 多个博客信息Json构造
-//     */
-//    public static JSONArray BlogListBody(List<Blog> blogList) {
-//        if (blogList != null && blogList.size() > 0) {
-//            JSONArray blogArray = new JSONArray();
-//            for (Blog blog : blogList) {
-//                blogArray.add(BlogBody(blog));
-//            }
-//            return blogArray;
-//        } else {
-//            return new JSONArray();
-//        }
-//    }
+    /**
+     * 多个动态信息Json构造
+     */
+    public static JSONArray ActionListBody(List<Action> actionList) {
+        if (actionList != null && actionList.size() > 0) {
+            JSONArray actionArray = new JSONArray();
+            for (Action action : actionList) {
+                actionArray.add(ActionBody(action));
+            }
+            return actionArray;
+        } else {
+            return new JSONArray();
+        }
+    }
 
     /**
      * 单个用户信息Json构造
@@ -164,15 +158,15 @@ public class Utility {
     /**
      * 头像地址构造
      */
-    private static String avatarAddress(String serverAddress, String fileName) {
-        return serverAddress + "avatar/" + fileName;
+    private static String avatarAddress(String fileName) {
+        return Constants.serverAddress + "avatar/" + fileName;
     }
 
     /**
-     * 博客图片地址构造
+     * 动态图片地址构造
      */
-    public static String blogAddress(String serverAddress, String fileName) {
-        return serverAddress + "blog/" + fileName;
+    private static String ActionAddress(String fileName) {
+        return Constants.serverAddress + "action/" + fileName;
     }
 
     /**
@@ -202,35 +196,81 @@ public class Utility {
         }
     }
 
-    /**
-     * 获取现在时间
-     *
-     * @return yyyy-MM-dd HH:mm:ss
-     */
-    public static String getNowDate() {
-        Date dNow = new Date();
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return ft.format(dNow);
-    }
+//    /**
+//     * 获取现在时间
+//     *
+//     * @return yyyy-MM-dd HH:mm:ss
+//     */
+//    public static String getNowDate() {
+//        Date dNow = new Date();
+//        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        return ft.format(dNow);
+//    }
 
     /**
-     * 保存头像
+     * 保存图片
      *
-     * @param file 头像图片
+     * @param image 头像图片
+     * @param type  图片类型 1.用户头像 2.动态图片
      * @return 头像图片地址
      */
-    public static String saveAvatar(MultipartFile file) {
-        if (file == null) {
+    public static String saveImage(MultipartFile image, Integer type) {
+        if (image == null) {
             return null;
         }
-        String fileName = UUID.randomUUID() + file.getOriginalFilename();
+        String fileName = UUID.randomUUID() + image.getOriginalFilename();
         try {
-            file.transferTo(new File(Constants.avatarPath + fileName));
-            return avatarAddress(Constants.serverAddress, fileName);
+            if (type == 1) {
+                image.transferTo(new File(Constants.avatarPath + fileName));
+                return avatarAddress(fileName);
+            } else if (type == 2) {
+                image.transferTo(new File(Constants.actionPath + fileName));
+                return ActionAddress(fileName);
+            } else {
+                return null;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * @param s
+     * @return 获得图片
+     */
+    public static List<String> getImg(String s) {
+        String regex;
+        List<String> list = new ArrayList<>();
+        regex = "src=\"(.*?)\"";
+        Pattern pa = Pattern.compile(regex, Pattern.DOTALL);
+        Matcher ma = pa.matcher(s);
+        while (ma.find()) {
+            list.add(ma.group());
+        }
+        return list;
+    }
+
+    /**
+     * 返回存有图片地址的数组
+     *
+     * @param tar
+     * @return
+     */
+    public static String[] getImageAddress(String tar) {
+        List<String> imgList = getImg(tar);
+
+        String res[] = new String[imgList.size()];
+
+        if (imgList.size() > 0) {
+            for (int i = 0; i < imgList.size(); i++) {
+                int begin = imgList.get(i).indexOf("\"") + 1;
+                int end = imgList.get(i).lastIndexOf("\"");
+                String url[] = imgList.get(i).substring(begin, end).split("/");
+                res[i] = url[url.length - 1];
+            }
+        } else {
+        }
+        return res;
+    }
 }

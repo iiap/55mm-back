@@ -115,7 +115,7 @@ public class UserController {
     /**
      * 上传头像
      *
-     * @param avatar   头像图片
+     * @param avatar 头像图片
      * @param userId 用户Id
      * @return success data:头像图片地址
      * failed message
@@ -127,7 +127,7 @@ public class UserController {
     @PostMapping("/user/avatar")
     @ResponseBody
     public String updateAvatar(@RequestParam MultipartFile avatar, @RequestParam Integer userId) {
-        Result updateAvatarResult = userService.updateAvatar(new User(userId, Utility.saveAvatar(avatar)));
+        Result updateAvatarResult = userService.updateAvatar(new User(userId, Utility.saveImage(avatar, 1)));
         if (updateAvatarResult.getStatus().equals(Result.success)) {
             return Utility.ResultBody(200, null, updateAvatarResult.getData());
         } else {
