@@ -87,7 +87,7 @@ public class ActionServiceImplements implements ActionService {
         if (!existAction.getAuthor().getUserId().equals(action.getAuthor().getUserId())) {
             return new Result(Result.failed, "没有权限删除，您不是该动态的作者");
         }
-        actionRepository.deleteByActionId(existAction.getActionId());
+        actionRepository.deleteById(existAction.getActionId());
         logger.info("删除动态:" + existAction.getActionId());
         return new Result(Result.success);
     }

@@ -20,7 +20,7 @@ public interface ActionService {
      * 查询动态
      *
      * @param actionId 动态Id
-     * @return success
+     * @return success data:Action对象
      * failed message
      * 1.action对象为空
      * 2.该动态不存在

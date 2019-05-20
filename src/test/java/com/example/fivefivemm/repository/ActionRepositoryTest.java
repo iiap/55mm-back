@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import javax.transaction.Transactional;
 
 /**
  * 动态仓库测试类
@@ -27,9 +26,4 @@ public class ActionRepositoryTest {
         System.out.println(actionRepository.findByActionId(2));
     }
 
-    @Test
-    @Transactional
-    public void deleteByActionIdTest() {
-        actionRepository.deleteByActionId(2);
-    }
 }

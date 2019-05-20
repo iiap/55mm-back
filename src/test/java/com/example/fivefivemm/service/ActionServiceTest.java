@@ -67,7 +67,7 @@ public class ActionServiceTest {
         User user = new User();
         user.setUserId(1);
 
-        Action action = new Action(user, 1);
+        Action action = new Action(user, 5);
 
         Result deleteActionResult = actionService.DeleteAction(action);
         if (deleteActionResult.getStatus().equals(Result.success)) {

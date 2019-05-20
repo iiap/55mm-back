@@ -33,7 +33,7 @@ public class ActionControllerTest {
 
     @Test
     public void RetrieveActionTest() {
-        System.out.println(actionController.RetrieveAction(2));
+        System.out.println(actionController.RetrieveAction(2, 2));
     }
 
     @Test

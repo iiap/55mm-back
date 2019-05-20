@@ -21,11 +21,4 @@ public interface ActionRepository extends JpaRepository<Action, Integer> {
      * @return 存在动态返回该动态，不存在返回null
      */
     Action findByActionId(Integer actionId);
-
-    /**
-     * 通过动态Id删除Action
-     *
-     * @param actionId 动态Id
-     */
-    void deleteByActionId(Integer actionId);
 }

@@ -43,6 +43,10 @@ public class Action {
 
     }
 
+    public Action(Integer actionId) {
+        this.actionId = actionId;
+    }
+
     public Action(User author, Integer actionId) {
         this.author = author;
         this.actionId = actionId;

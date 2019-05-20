@@ -1,7 +1,10 @@
 package com.example.fivefivemm.controller.action;
 
 import com.example.fivefivemm.entity.action.Action;
+import com.example.fivefivemm.entity.relation.ActionWatch;
+import com.example.fivefivemm.entity.user.User;
 import com.example.fivefivemm.service.ActionService;
+import com.example.fivefivemm.service.ActionWatchService;
 import com.example.fivefivemm.service.UserService;
 import com.example.fivefivemm.utility.Result;
 import com.example.fivefivemm.utility.Utility;
@@ -14,9 +17,11 @@ import java.util.*;
 
 /**
  * 动态控制器
+ * <p>
+ * 添加获取用户是否对动态进行了约拍
  *
  * @author tiga
- * @version 1.0
+ * @version 1.1
  * @since 2019年5月19日13:20:51
  */
 //生产环境
@@ -31,6 +36,9 @@ public class ActionController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private ActionWatchService actionWatchService;
 
 
     /**
@@ -57,6 +65,7 @@ public class ActionController {
      * 查询动态
      *
      * @param actionId 动态Id
+     * @param userId   用户Id
      * @return success data:action对象
      * failed message
      * 102
@@ -65,10 +74,12 @@ public class ActionController {
      */
     @GetMapping("/action")
     @ResponseBody
-    public String RetrieveAction(@RequestParam Integer actionId) {
+    public String RetrieveAction(@RequestParam Integer actionId, @RequestParam Integer userId) {
         Result retrieveActionResult = actionService.RetrieveAction(actionId);
         if (retrieveActionResult.getStatus().equals(Result.success)) {
-            return Utility.ResultBody(200, null, Utility.ActionBody((Action) retrieveActionResult.getData()));
+            Map<String, Object> actionMap = Utility.ActionBody((Action) retrieveActionResult.getData());
+            actionMap.put("isWatched", actionWatchService.RetrieveActionWatch(new ActionWatch(new User(userId), new Action(actionId))));
+            return Utility.ResultBody(200, null, actionMap);
         } else {
             return Utility.ResultBody(102, retrieveActionResult.getMessage(), null);
         }

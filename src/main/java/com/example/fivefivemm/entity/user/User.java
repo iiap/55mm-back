@@ -65,6 +65,10 @@ public class User {
 
     }
 
+    public User(Integer userId) {
+        this.userId = userId;
+    }
+
     public User(String account, String password) {
         this.account = account;
         this.password = password;
