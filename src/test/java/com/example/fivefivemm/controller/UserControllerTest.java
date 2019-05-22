@@ -60,5 +60,8 @@ public class UserControllerTest {
         System.out.println(userController.updatePassword(2, "123456789", "12345678"));
     }
 
-
+    @Test
+    public void ResetPasswordTest() {
+        System.out.println(userController.resetPassword("123456789@qq.com"));
+    }
 }

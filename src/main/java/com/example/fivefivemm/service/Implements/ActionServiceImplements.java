@@ -10,12 +10,16 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * 动态业务类
+ * <p>
+ * 增加获取全部动态
+ * 2019年5月21日16:47:22
  *
  * @author tiga
- * @version 1.0
+ * @version 1.1
  * @since 2019年5月19日13:03:44
  */
 @Service
@@ -35,9 +39,8 @@ public class ActionServiceImplements implements ActionService {
         if (action.getAuthor().getUserId() == null) {
             return new Result(Result.failed, "作者Id为空");
         }
-        actionRepository.save(action);
         logger.info("发表新动态:" + action);
-        return new Result(Result.success);
+        return new Result(Result.success, actionRepository.save(action));
     }
 
     @Override
@@ -51,6 +54,11 @@ public class ActionServiceImplements implements ActionService {
         }
         logger.info("查询动态:" + existAction.getActionId());
         return new Result(Result.success, existAction);
+    }
+
+    @Override
+    public List<Action> RetrieveAllAction() {
+        return actionRepository.findAll();
     }
 
     @Override

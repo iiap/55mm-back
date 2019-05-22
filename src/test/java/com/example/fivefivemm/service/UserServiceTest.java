@@ -98,7 +98,17 @@ public class UserServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     }
 
     @Test
-    public void RetrieveUserActionsTest(){
+    public void RetrieveUserActionsTest() {
         System.out.println(userService.RetrieveUserActions(3));
+    }
+
+    @Test
+    public void resetPasswordTest() {
+        Result resetPasswordResult = userService.resetPassword("2020118011@qq.com");
+        if (resetPasswordResult.getStatus().equals(Result.success)) {
+            System.out.println("重置密码成功,新密码:" + resetPasswordResult.getData());
+        } else {
+            System.out.println(resetPasswordResult.getMessage());
+        }
     }
 }

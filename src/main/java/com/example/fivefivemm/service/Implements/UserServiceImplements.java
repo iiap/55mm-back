@@ -187,4 +187,20 @@ public class UserServiceImplements implements UserService {
         logger.info("获取用户动态: 用户Id:" + existUser.getUserId() + ":" + userActions);
         return userActions;
     }
+
+    @Override
+    @Transactional
+    public Result resetPassword(String email) {
+        if (email == null || email.length() == 0) {
+            return new Result(Result.failed, "邮箱为空");
+        }
+        User existUser = userRepository.findByEmail(email);
+        if (existUser == null) {
+            return new Result(Result.failed, "不存在的用户");
+        }
+        String newPassword = Utility.randomPassword();
+        existUser.setPassword(Utility.md5(newPassword));
+        logger.info("重置用户密码:" + email);
+        return new Result(Result.success, null, newPassword);
+    }
 }

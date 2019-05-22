@@ -1,5 +1,7 @@
 package com.example.fivefivemm.repository;
 
+import com.example.fivefivemm.entity.action.Action;
+import com.example.fivefivemm.entity.user.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +26,11 @@ public class ActionRepositoryTest {
     @Test
     public void findByActionIdTest() {
         System.out.println(actionRepository.findByActionId(2));
+    }
+
+    @Test
+    public void CreateActionTest() {
+        System.out.println(actionRepository.save(new Action(new User(1), "title", "address", 200, "content")));
     }
 
 }

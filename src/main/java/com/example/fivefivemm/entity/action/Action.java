@@ -1,9 +1,11 @@
 package com.example.fivefivemm.entity.action;
 
+import com.example.fivefivemm.entity.relation.ActionWatch;
 import com.example.fivefivemm.entity.user.User;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * 动态表
@@ -39,6 +41,9 @@ public class Action {
     @Column(nullable = false)
     private Integer cost;
 
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = ActionWatch.class, mappedBy = "action", cascade = CascadeType.REMOVE)
+    private Set<ActionWatch> actionWatches;
+
     public Action() {
 
     }
@@ -52,8 +57,8 @@ public class Action {
         this.actionId = actionId;
     }
 
-    public Action(User user, String title, String address, Integer cost, String content) {
-        this.author = user;
+    public Action(User author, String title, String address, Integer cost, String content) {
+        this.author = author;
         this.title = title;
         this.address = address;
         this.cost = cost;
@@ -116,9 +121,17 @@ public class Action {
         this.cost = cost;
     }
 
+    public Set<ActionWatch> getActionWatches() {
+        return actionWatches;
+    }
+
+    public void setActionWatches(Set<ActionWatch> actionWatches) {
+        this.actionWatches = actionWatches;
+    }
+
     @Override
     public String toString() {
-        return "[Action:actionId:" + actionId + ",title:" + title + ",address:" + address + ",cost:" + cost + ",content:" + content + ",author:" + author.getUserId() +
+        return "[Action:actionId:" + actionId + ",title:" + title + ",createTime:" + createTime + ",address:" + address + ",cost:" + cost + ",content:" + content + ",authorId:" + author.getUserId() +
                 "]";
     }
 }

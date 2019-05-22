@@ -19,9 +19,12 @@ import java.util.*;
  * 动态控制器
  * <p>
  * 添加获取用户是否对动态进行了约拍
+ * <p>
+ * 添加获取全部动态接口，修改获取动态参数userId为非必需，发表动态后返回该动态o
+ * 2019年5月21日18:19:42
  *
  * @author tiga
- * @version 1.1
+ * @version 1.2
  * @since 2019年5月19日13:20:51
  */
 //生产环境
@@ -45,7 +48,8 @@ public class ActionController {
      * 发表动态
      *
      * @param action 动态对象
-     * @return failed message
+     * @return success: data:保存的动态
+     * failed message
      * 101
      * 1.action对象为空
      * 2.作者Id为空
@@ -55,7 +59,7 @@ public class ActionController {
     public String CreateAction(@RequestBody Action action) {
         Result createActionResult = actionService.CreateAction(action);
         if (createActionResult.getStatus().equals(Result.success)) {
-            return Utility.ResultBody(200, null, null);
+            return Utility.ResultBody(200, null, Utility.ActionBody((Action) createActionResult.getData()));
         } else {
             return Utility.ResultBody(101, createActionResult.getMessage(), null);
         }
@@ -74,11 +78,13 @@ public class ActionController {
      */
     @GetMapping("/action")
     @ResponseBody
-    public String RetrieveAction(@RequestParam Integer actionId, @RequestParam Integer userId) {
+    public String RetrieveAction(@RequestParam Integer actionId, @RequestParam(required = false) Integer userId) {
         Result retrieveActionResult = actionService.RetrieveAction(actionId);
         if (retrieveActionResult.getStatus().equals(Result.success)) {
             Map<String, Object> actionMap = Utility.ActionBody((Action) retrieveActionResult.getData());
-            actionMap.put("isWatched", actionWatchService.RetrieveActionWatch(new ActionWatch(new User(userId), new Action(actionId))));
+            if (userId != null) {
+                actionMap.put("isWatched", actionWatchService.RetrieveActionWatch(new ActionWatch(new User(userId), new Action(actionId))));
+            }
             return Utility.ResultBody(200, null, actionMap);
         } else {
             return Utility.ResultBody(102, retrieveActionResult.getMessage(), null);
@@ -151,14 +157,14 @@ public class ActionController {
      * 获取动态集合
      *
      * @param userId 用户Id
-     * @param type   查询类型 1.用户自己的动态 2.用户收藏的动态
+     * @param type   查询类型 1.用户自己的动态 2.所有动态
      * @return success data:动态集合
      * failed message
      * 106 错误的查询类型
      */
     @GetMapping("/actions")
     @ResponseBody
-    public String RetrieveActions(@RequestParam Integer userId, @RequestParam Integer type) {
+    public String RetrieveActions(@RequestParam(required = false) Integer userId, @RequestParam Integer type) {
         if (type == 1) {
             Set<Action> userActionSets = userService.RetrieveUserActions(userId);
             //对动态集合进行排序
@@ -170,6 +176,15 @@ public class ActionController {
                 }
             });
             return Utility.ResultBody(200, null, Utility.ActionListBody(ActionList));
+        } else if (type == 2) {
+            List<Action> actionList = actionService.RetrieveAllAction();
+            Collections.sort(actionList, new Comparator<Action>() {
+                @Override
+                public int compare(Action o1, Action o2) {
+                    return o1.getActionId() > o2.getActionId() ? -1 : 1;
+                }
+            });
+            return Utility.ResultBody(200, null, Utility.ActionListBody(actionList));
         } else {
             return Utility.ResultBody(106, "错误的查询类型", null);
         }

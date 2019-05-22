@@ -1,6 +1,7 @@
 package com.example.fivefivemm.controller.user;
 
 import com.example.fivefivemm.entity.user.User;
+import com.example.fivefivemm.service.SendMailService;
 import com.example.fivefivemm.service.UserService;
 import com.example.fivefivemm.utility.Result;
 import com.example.fivefivemm.utility.Utility;
@@ -12,9 +13,12 @@ import javax.annotation.Resource;
 
 /**
  * 用户控制器
+ * <p>
+ * 添加通过邮箱重置密码
+ * 2019年5月22日08:11:12
  *
  * @author tiga
- * @version 1.0
+ * @version 1.1
  * @since 2019年5月13日20:06:27
  */
 
@@ -27,6 +31,9 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private SendMailService sendMailService;
 
     /**
      * 用户注册
@@ -155,6 +162,27 @@ public class UserController {
             return Utility.ResultBody(200, null, null);
         } else {
             return Utility.ResultBody(106, updatePasswordResult.getMessage(), null);
+        }
+    }
+
+    /**
+     * 通过邮箱重置密码
+     *
+     * @param email 用户注册的邮箱
+     * @return failed message
+     * 107
+     * 1.邮箱为空
+     * 2.不存在的用户
+     */
+    @PostMapping("/user/password")
+    @ResponseBody
+    public String resetPassword(@RequestParam String email) {
+        Result resetPasswordResult = userService.resetPassword(email);
+        if (resetPasswordResult.getStatus().equals(Result.success)) {
+            sendMailService.sendMailForResetPassWord(email, (String) resetPasswordResult.getData());
+            return Utility.ResultBody(200, null, null);
+        } else {
+            return Utility.ResultBody(107, resetPasswordResult.getMessage(), null);
         }
     }
 }

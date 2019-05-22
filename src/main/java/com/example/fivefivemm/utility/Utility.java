@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,28 +51,28 @@ public class Utility {
         }
     }
 
-//    /**
-//     * 生成10位随机密码
-//     *
-//     * @return 生成的随机密码
-//     */
-//    public static String randomPassword() {
-//        String val = "";
-//        Random random = new Random();
-//        //length为几位密码
-//        for (int i = 0; i < 10; i++) {
-//            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
-//            //输出字母还是数字
-//            if ("char".equalsIgnoreCase(charOrNum)) {
-//                //输出是大写字母还是小写字母
-//                int temp = random.nextInt(2) % 2 == 0 ? 65 : 97;
-//                val += (char) (random.nextInt(26) + temp);
-//            } else if ("num".equalsIgnoreCase(charOrNum)) {
-//                val += String.valueOf(random.nextInt(10));
-//            }
-//        }
-//        return val;
-//    }
+    /**
+     * 生成10位随机密码
+     *
+     * @return 生成的随机密码
+     */
+    public static String randomPassword() {
+        String val = "";
+        Random random = new Random();
+        //length为几位密码
+        for (int i = 0; i < 10; i++) {
+            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
+            //输出字母还是数字
+            if ("char".equalsIgnoreCase(charOrNum)) {
+                //输出是大写字母还是小写字母
+                int temp = random.nextInt(2) % 2 == 0 ? 65 : 97;
+                val += (char) (random.nextInt(26) + temp);
+            } else if ("num".equalsIgnoreCase(charOrNum)) {
+                val += String.valueOf(random.nextInt(10));
+            }
+        }
+        return val;
+    }
 
     /**
      * 业务Json构造
@@ -100,7 +101,11 @@ public class Utility {
         actionMap.put("cost", action.getCost());
         actionMap.put("content", action.getContent());
         actionMap.put("address", action.getAddress());
-        actionMap.put("time", action.getCreateTime().toString());
+        if (action.getCreateTime() != null) {
+            actionMap.put("time", action.getCreateTime().toString());
+        } else {
+            actionMap.put("time", getNowDate());
+        }
         //获取内容中的图片
         String images[] = getImageAddress(action.getContent());
         if (images.length != 0) {
@@ -196,16 +201,16 @@ public class Utility {
         }
     }
 
-//    /**
-//     * 获取现在时间
-//     *
-//     * @return yyyy-MM-dd HH:mm:ss
-//     */
-//    public static String getNowDate() {
-//        Date dNow = new Date();
-//        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        return ft.format(dNow);
-//    }
+    /**
+     * 获取现在时间
+     *
+     * @return yyyy-MM-dd HH:mm:ss
+     */
+    public static String getNowDate() {
+        Date dNow = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return ft.format(dNow);
+    }
 
     /**
      * 保存图片

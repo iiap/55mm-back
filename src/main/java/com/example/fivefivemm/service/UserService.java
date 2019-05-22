@@ -88,4 +88,14 @@ public interface UserService {
      */
     Set<Action> RetrieveUserActions(Integer userId);
 
+    /**
+     * 通过邮箱重置密码
+     *
+     * @param email 邮箱
+     * @return success data:新密码
+     * failed message
+     * 1.邮箱为空
+     * 2.不存在的用户
+     */
+    Result resetPassword(String email);
 }
