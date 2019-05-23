@@ -35,7 +35,7 @@ public class SendMailServiceImplements implements SendMailService {
                 //邮件发送方
                 mimeMessageHelper.setFrom(from);
                 //邮件主题
-                mimeMessageHelper.setSubject("【CoolBlog】");
+                mimeMessageHelper.setSubject("【55mm约拍平台】");
                 //邮件接收方
                 mimeMessageHelper.setTo(email);
                 //邮件内容

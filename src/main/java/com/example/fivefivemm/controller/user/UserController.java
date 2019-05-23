@@ -23,9 +23,9 @@ import javax.annotation.Resource;
  */
 
 //生产环境
-//@CrossOrigin(origins = "http://www.hylovecode.cn")
+@CrossOrigin(origins = "http://www.hylovecode.cn")
 //本地测试
-@CrossOrigin(origins = "http://localhost:8080")
+//@CrossOrigin(origins = "http://localhost:8080")
 @Controller
 public class UserController {
 

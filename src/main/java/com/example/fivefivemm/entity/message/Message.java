@@ -24,16 +24,36 @@ public class Message {
     private Timestamp createTime;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private User user;
+    @JoinColumn(name = "watcherId", referencedColumnName = "userId")
+    private User watcher;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Action.class)
     @JoinColumn(name = "actionId", referencedColumnName = "actionId")
     private Action action;
 
+    private Integer actionAuthorId;
+
     private boolean isRead;
 
-    private boolean isAccept;
+    private String isAccept;
+
+    public Message() {
+    }
+
+    public Message(Action action, User watcher) {
+        this.watcher = watcher;
+        this.action = action;
+        this.isAccept = "未读";
+        this.isRead = false;
+    }
+
+    public Message(Action action, User watcher, Integer actionAuthorId) {
+        this.watcher = watcher;
+        this.action = action;
+        this.actionAuthorId = actionAuthorId;
+        this.isAccept = "未读";
+        this.isRead = false;
+    }
 
     public Integer getMessageId() {
         return messageId;
@@ -52,11 +72,11 @@ public class Message {
     }
 
     public User getUser() {
-        return user;
+        return watcher;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(User watcher) {
+        this.watcher = watcher;
     }
 
     public Action getAction() {
@@ -67,6 +87,14 @@ public class Message {
         this.action = action;
     }
 
+    public Integer getActionAuthorId() {
+        return actionAuthorId;
+    }
+
+    public void setActionAuthorId(Integer actionAuthorId) {
+        this.actionAuthorId = actionAuthorId;
+    }
+
     public boolean isRead() {
         return isRead;
     }
@@ -75,11 +103,16 @@ public class Message {
         isRead = read;
     }
 
-    public boolean isAccept() {
+    public String isAccept() {
         return isAccept;
     }
 
-    public void setAccept(boolean accept) {
+    public void setAccept(String accept) {
         isAccept = accept;
+    }
+
+    @Override
+    public String toString() {
+        return "[消息:消息Id:" + messageId + ",约拍者Id:" + watcher.getUserId() + ",动态Id:" + action.getActionId() + "]";
     }
 }

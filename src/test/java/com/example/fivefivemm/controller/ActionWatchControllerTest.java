@@ -28,10 +28,11 @@ public class ActionWatchControllerTest {
     @Test
     public void CreateActionWatchTest() {
         User user = new User();
-        user.setUserId(1);
+        user.setUserId(4);
 
         Action action = new Action();
-        action.setActionId(3);
+        action.setActionId(29);
+        action.setAuthor(new User(1));
 
         System.out.println(actionWatchController.CreateActionWatch(new ActionWatch(user, action)));
     }
@@ -42,7 +43,8 @@ public class ActionWatchControllerTest {
         user.setUserId(1);
 
         Action action = new Action();
-        action.setActionId(3);
+        action.setActionId(30);
+//        action.setAuthor(new User(2));
 
         System.out.println(actionWatchController.DeleteActionWatch(new ActionWatch(user, action)));
     }

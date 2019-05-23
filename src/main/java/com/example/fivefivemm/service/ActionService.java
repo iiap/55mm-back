@@ -32,7 +32,7 @@ public interface ActionService {
     /**
      * 获取所有动态
      *
-     * @return 存在返回动态集合，不存在返回nullo
+     * @return 存在返回动态集合，不存在返回null
      */
     List<Action> RetrieveAllAction();
 

@@ -20,7 +20,7 @@ import java.util.*;
  * <p>
  * 添加获取用户是否对动态进行了约拍
  * <p>
- * 添加获取全部动态接口，修改获取动态参数userId为非必需，发表动态后返回该动态o
+ * 添加获取全部动态接口，修改获取动态参数userId为非必需，发表动态后返回该动态
  * 2019年5月21日18:19:42
  *
  * @author tiga
@@ -28,9 +28,9 @@ import java.util.*;
  * @since 2019年5月19日13:20:51
  */
 //生产环境
-//@CrossOrigin(origins = "http://www.hylovecode.cn")
+@CrossOrigin(origins = "http://www.hylovecode.cn")
 //本地测试
-@CrossOrigin(origins = "http://localhost:8080")
+//@CrossOrigin(origins = "http://localhost:8080")
 @Controller
 public class ActionController {
 

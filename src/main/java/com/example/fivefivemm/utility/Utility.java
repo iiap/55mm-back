@@ -1,6 +1,7 @@
 package com.example.fivefivemm.utility;
 
 import com.example.fivefivemm.entity.action.Action;
+import com.example.fivefivemm.entity.message.Message;
 import com.example.fivefivemm.entity.user.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -277,5 +278,126 @@ public class Utility {
         } else {
         }
         return res;
+    }
+
+    /**
+     * 消息接受者Json构造
+     *
+     * @param message 消息对象
+     * @return Map集合
+     */
+    public static Map MessageBodyForAuthor(Message message) {
+        Map<String, Object> messageMap = new HashMap<>();
+        Map<String, Object> watcherMap = new HashMap<>();
+        Map<String, Object> actionMap = new HashMap<>();
+//        Map<String, Object> actionAuthorMap = new HashMap<>();
+
+        messageMap.put("messageId", message.getMessageId());
+        messageMap.put("time", message.getCreateTime().toString());
+        messageMap.put("isRead", message.isRead());
+        messageMap.put("isAccept", message.isAccept());
+
+        watcherMap.put("userId", message.getUser().getUserId());
+        watcherMap.put("name", message.getUser().getName());
+        watcherMap.put("avatar", message.getUser().getAvatar());
+        watcherMap.put("sex", message.getUser().getSex());
+        watcherMap.put("type", message.getUser().getType());
+
+        actionMap.put("actionId", message.getAction().getActionId());
+        actionMap.put("title", message.getAction().getTitle());
+//        actionMap.put("cost", message.getAction().getCost());
+//        actionMap.put("address", message.getAction().getAddress());
+//        actionMap.put("time", message.getAction().getCreateTime().toString());
+
+//        actionAuthorMap.put("userId", message.getAction().getAuthor().getUserId());
+//        actionAuthorMap.put("name", message.getAction().getAuthor().getName());
+//        actionAuthorMap.put("avatar", message.getAction().getAuthor().getAvatar());
+//        actionAuthorMap.put("sex", message.getAction().getAuthor().getSex());
+//        actionAuthorMap.put("type", message.getAction().getAuthor().getType());
+
+//        actionMap.put("author", actionAuthorMap);
+        messageMap.put("watcher", watcherMap);
+        messageMap.put("action", actionMap);
+        return messageMap;
+    }
+
+    /**
+     * 消息发起者Json构造
+     *
+     * @param message 消息对象
+     * @return Map集合
+     */
+    public static Map MessageBodyForWatcher(Message message) {
+        Map<String, Object> messageMap = new HashMap<>();
+//        Map<String, Object> watcherMap = new HashMap<>();
+        Map<String, Object> actionMap = new HashMap<>();
+        Map<String, Object> actionAuthorMap = new HashMap<>();
+
+        messageMap.put("messageId", message.getMessageId());
+        messageMap.put("time", message.getCreateTime().toString());
+        messageMap.put("isRead", message.isRead());
+        messageMap.put("isAccept", message.isAccept());
+
+//        watcherMap.put("userId", message.getUser().getUserId());
+//        watcherMap.put("name", message.getUser().getName());
+//        watcherMap.put("avatar", message.getUser().getAvatar());
+//        watcherMap.put("sex", message.getUser().getSex());
+//        watcherMap.put("type", message.getUser().getType());
+
+        actionMap.put("actionId", message.getAction().getActionId());
+        actionMap.put("title", message.getAction().getTitle());
+//        actionMap.put("cost", message.getAction().getCost());
+//        actionMap.put("address", message.getAction().getAddress());
+//        actionMap.put("time", message.getAction().getCreateTime().toString());
+
+        actionAuthorMap.put("userId", message.getAction().getAuthor().getUserId());
+        actionAuthorMap.put("name", message.getAction().getAuthor().getName());
+        actionAuthorMap.put("avatar", message.getAction().getAuthor().getAvatar());
+        actionAuthorMap.put("sex", message.getAction().getAuthor().getSex());
+        actionAuthorMap.put("type", message.getAction().getAuthor().getType());
+
+        actionMap.put("author", actionAuthorMap);
+//        messageMap.put("watcher", watcherMap);
+        messageMap.put("action", actionMap);
+        return messageMap;
+    }
+
+    /**
+     * 多个消息json构造
+     */
+    public static JSONArray MessageListBody(List<Message> messageList, Integer type) {
+        if (messageList != null && messageList.size() > 0) {
+            JSONArray messageArray = new JSONArray();
+            for (Message message : messageList) {
+                if (type == 1) {
+                    messageArray.add(MessageBodyForAuthor(message));
+                } else {
+                    messageArray.add(MessageBodyForWatcher(message));
+                }
+            }
+            return messageArray;
+        } else {
+            return new JSONArray();
+        }
+    }
+
+    /**
+     * 获取未读消息条数
+     *
+     * @param messageList 消息集合
+     * @return 未读消息条数
+     */
+    public static Integer getNotReadMessage(List<Message> messageList) {
+        if (messageList != null && messageList.size() > 0) {
+            int num = 0;
+            for (Message message : messageList) {
+                if (!message.isRead()) {
+                    num++;
+                }
+            }
+            return num;
+        } else {
+            return 0;
+        }
     }
 }
