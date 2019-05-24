@@ -36,7 +36,7 @@ public class UserControllerTest {
 
     @Test
     public void retrieveInformationTest() {
-        System.out.println(userController.retrieveInformation(1));
+        System.out.println(userController.retrieveInformationTest(1));
     }
 
     @Test

@@ -5,11 +5,14 @@ import com.example.fivefivemm.service.SendMailService;
 import com.example.fivefivemm.service.UserService;
 import com.example.fivefivemm.utility.Result;
 import com.example.fivefivemm.utility.Utility;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * 用户控制器
@@ -23,9 +26,9 @@ import javax.annotation.Resource;
  */
 
 //生产环境
-@CrossOrigin(origins = "http://www.hylovecode.cn")
+//@CrossOrigin(origins = "http://www.hylovecode.cn")
 //本地测试
-//@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:8080")
 @Controller
 public class UserController {
 
@@ -96,6 +99,17 @@ public class UserController {
             return Utility.ResultBody(200, null, Utility.userBody((User) retrieveInformationResult.getData()));
         } else {
             return Utility.ResultBody(103, retrieveInformationResult.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/user/informationTest")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> retrieveInformationTest(@RequestParam Integer userId) {
+        Result retrieveInformationResult = userService.retrieveInformation(userId);
+        if (retrieveInformationResult.getStatus().equals(Result.success)) {
+            return new ResponseEntity<Map<String, Object>>(Utility.userBody((User) retrieveInformationResult.getData()), HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<Map<String, Object>>(HttpStatus.NOT_FOUND);
         }
     }
 
