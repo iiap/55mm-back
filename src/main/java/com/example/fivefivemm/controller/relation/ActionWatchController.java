@@ -22,9 +22,9 @@ import javax.annotation.Resource;
  * @since 2019年5月20日18:34:16
  */
 //生产环境
-//@CrossOrigin(origins = "http://www.hylovecode.cn")
+@CrossOrigin(origins = "https://hylovecode.cn")
 //本地测试
-@CrossOrigin(origins = "http://localhost:8080")
+//@CrossOrigin(origins = "http://localhost:8080")
 @Controller
 public class ActionWatchController {
 

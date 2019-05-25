@@ -140,24 +140,30 @@ public class Utility {
     }
 
     /**
-     * 单个用户信息Json构造
+     * 单个用户信息Json构造(完整 type=1 部分 type=2)
      */
-    public static Map userBody(User user) {
+    public static Map userBody(User user, Integer type) {
         Map<String, Object> userMap = new HashMap<>();
+        //基础信息
         userMap.put("userId", user.getUserId());
         userMap.put("name", user.getName());
         userMap.put("sex", user.getSex());
         userMap.put("age", user.getAge());
-        userMap.put("email", user.getEmail());
-        userMap.put("phone", user.getPhone());
-        userMap.put("qq", user.getQq());
         userMap.put("introduction", user.getIntroduction());
-        userMap.put("weChat", user.getWeChat());
         userMap.put("avatar", user.getAvatar());
         userMap.put("type", user.getType());
         if (user.getBirthday() != null) {
             userMap.put("birthday", user.getBirthday().toString().substring(0, 10));
         }
+
+        //隐私信息
+        if (type == 1) {
+            userMap.put("email", user.getEmail());
+            userMap.put("phone", user.getPhone());
+            userMap.put("qq", user.getQq());
+            userMap.put("weChat", user.getWeChat());
+        }
+
         return userMap;
     }
 

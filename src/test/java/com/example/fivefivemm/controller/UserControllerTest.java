@@ -36,7 +36,7 @@ public class UserControllerTest {
 
     @Test
     public void retrieveInformationTest() {
-        System.out.println(userController.retrieveInformationTest(1));
+        System.out.println(userController.retrieveInformation(1));
     }
 
     @Test
@@ -63,5 +63,10 @@ public class UserControllerTest {
     @Test
     public void ResetPasswordTest() {
         System.out.println(userController.resetPassword("123456789@qq.com"));
+    }
+
+    @Test
+    public void retrieveOtherInformationTest() {
+        System.out.println(userController.retrieveOtherInformation(1));
     }
 }

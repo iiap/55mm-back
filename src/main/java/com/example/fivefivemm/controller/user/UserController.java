@@ -5,30 +5,31 @@ import com.example.fivefivemm.service.SendMailService;
 import com.example.fivefivemm.service.UserService;
 import com.example.fivefivemm.utility.Result;
 import com.example.fivefivemm.utility.Utility;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * 用户控制器
  * <p>
  * 添加通过邮箱重置密码
  * 2019年5月22日08:11:12
+ * <p>
+ * 添加获取其他用户信息接口
+ * 2019年5月25日16:25:08
  *
  * @author tiga
- * @version 1.1
+ * @version 1.2
  * @since 2019年5月13日20:06:27
  */
 
 //生产环境
-//@CrossOrigin(origins = "http://www.hylovecode.cn")
+@CrossOrigin(origins = "https://hylovecode.cn")
 //本地测试
-@CrossOrigin(origins = "http://localhost:8080")
+//@CrossOrigin(origins = "http://localhost:8080")
 @Controller
 public class UserController {
 
@@ -75,7 +76,7 @@ public class UserController {
     public String login(@RequestBody User user) {
         Result loginResult = userService.login(user);
         if (loginResult.getStatus().equals(Result.success)) {
-            return Utility.ResultBody(200, null, Utility.userBody((User) loginResult.getData()));
+            return Utility.ResultBody(200, null, Utility.userBody((User) loginResult.getData(), 1));
         } else {
             return Utility.ResultBody(102, loginResult.getMessage(), null);
         }
@@ -96,20 +97,9 @@ public class UserController {
     public String retrieveInformation(@RequestParam Integer userId) {
         Result retrieveInformationResult = userService.retrieveInformation(userId);
         if (retrieveInformationResult.getStatus().equals(Result.success)) {
-            return Utility.ResultBody(200, null, Utility.userBody((User) retrieveInformationResult.getData()));
+            return Utility.ResultBody(200, null, Utility.userBody((User) retrieveInformationResult.getData(), 1));
         } else {
             return Utility.ResultBody(103, retrieveInformationResult.getMessage(), null);
-        }
-    }
-
-    @GetMapping("/user/informationTest")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> retrieveInformationTest(@RequestParam Integer userId) {
-        Result retrieveInformationResult = userService.retrieveInformation(userId);
-        if (retrieveInformationResult.getStatus().equals(Result.success)) {
-            return new ResponseEntity<Map<String, Object>>(Utility.userBody((User) retrieveInformationResult.getData()), HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<Map<String, Object>>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -197,6 +187,27 @@ public class UserController {
             return Utility.ResultBody(200, null, null);
         } else {
             return Utility.ResultBody(107, resetPasswordResult.getMessage(), null);
+        }
+    }
+
+    /**
+     * 获取其他用户信息
+     *
+     * @param userId 用户Id
+     * @return success data:user对象
+     * failed message
+     * 108
+     * 1.userId为空
+     * 2.该用户不存在
+     */
+    @GetMapping("/user/information/others")
+    @ResponseBody
+    public String retrieveOtherInformation(@RequestParam Integer userId) {
+        Result retrieveInformationResult = userService.retrieveInformation(userId);
+        if (retrieveInformationResult.getStatus().equals(Result.success)) {
+            return Utility.ResultBody(200, null, Utility.userBody((User) retrieveInformationResult.getData(), 2));
+        } else {
+            return Utility.ResultBody(103, retrieveInformationResult.getMessage(), null);
         }
     }
 }
