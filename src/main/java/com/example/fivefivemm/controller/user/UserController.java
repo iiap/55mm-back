@@ -1,16 +1,17 @@
 package com.example.fivefivemm.controller.user;
 
 import com.example.fivefivemm.entity.user.User;
+import com.example.fivefivemm.service.CollectionService;
 import com.example.fivefivemm.service.SendMailService;
 import com.example.fivefivemm.service.UserService;
 import com.example.fivefivemm.utility.Result;
 import com.example.fivefivemm.utility.Utility;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * 用户控制器
@@ -20,6 +21,9 @@ import javax.annotation.Resource;
  * <p>
  * 添加获取其他用户信息接口
  * 2019年5月25日16:25:08
+ * <p>
+ * 添加获取是否关注用户
+ * 2019年5月27日13:41:23
  *
  * @author tiga
  * @version 1.2
@@ -38,6 +42,9 @@ public class UserController {
 
     @Resource
     private SendMailService sendMailService;
+
+    @Resource
+    private CollectionService collectionService;
 
     /**
      * 用户注册
@@ -202,10 +209,14 @@ public class UserController {
      */
     @GetMapping("/user/information/others")
     @ResponseBody
-    public String retrieveOtherInformation(@RequestParam Integer userId) {
+    public String retrieveOtherInformation(@RequestParam Integer userId, @RequestParam(required = false) Integer watcherId) {
         Result retrieveInformationResult = userService.retrieveInformation(userId);
         if (retrieveInformationResult.getStatus().equals(Result.success)) {
-            return Utility.ResultBody(200, null, Utility.userBody((User) retrieveInformationResult.getData(), 2));
+            Map<String, Object> userMap = Utility.userBody((User) retrieveInformationResult.getData(), 2);
+            if (watcherId != null) {
+                userMap.put("isFocus", collectionService.findUserCollection(userId, watcherId));
+            }
+            return Utility.ResultBody(200, null, userMap);
         } else {
             return Utility.ResultBody(103, retrieveInformationResult.getMessage(), null);
         }

@@ -7,10 +7,10 @@ import java.io.Serializable;
 
 /**
  * 用户关注表,保存用户之间的关注信息
- * 2019.3.7
  *
  * @author tiga
  * @version 1.0
+ * @since 2019年5月27日11:18:18
  */
 @Entity
 @Table(name = "user_collection")
@@ -28,6 +28,14 @@ public class UserCollection implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "fansId", referencedColumnName = "userId")
     private User fans;
+
+    public UserCollection() {
+    }
+
+    public UserCollection(User focus, User fans) {
+        this.focus = focus;
+        this.fans = fans;
+    }
 
     public Integer getUserCollectionId() {
         return userCollectionId;

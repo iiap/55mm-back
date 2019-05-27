@@ -5,6 +5,7 @@ import com.example.fivefivemm.entity.relation.ActionWatch;
 import com.example.fivefivemm.entity.user.User;
 import com.example.fivefivemm.service.ActionService;
 import com.example.fivefivemm.service.ActionWatchService;
+import com.example.fivefivemm.service.CollectionService;
 import com.example.fivefivemm.service.UserService;
 import com.example.fivefivemm.utility.Result;
 import com.example.fivefivemm.utility.Utility;
@@ -22,9 +23,12 @@ import java.util.*;
  * <p>
  * 添加获取全部动态接口，修改获取动态参数userId为非必需，发表动态后返回该动态
  * 2019年5月21日18:19:42
+ * <p>
+ * 添加判断动态是否收藏
+ * 2019年5月27日13:35:39
  *
  * @author tiga
- * @version 1.2
+ * @version 1.3
  * @since 2019年5月19日13:20:51
  */
 //生产环境
@@ -42,6 +46,9 @@ public class ActionController {
 
     @Resource
     private ActionWatchService actionWatchService;
+
+    @Resource
+    private CollectionService collectionService;
 
 
     /**
@@ -84,6 +91,7 @@ public class ActionController {
             Map<String, Object> actionMap = Utility.ActionBody((Action) retrieveActionResult.getData());
             if (userId != null) {
                 actionMap.put("isWatched", actionWatchService.RetrieveActionWatch(new ActionWatch(new User(userId), new Action(actionId))));
+                actionMap.put("isCollected", collectionService.findActionCollection(userId, actionId));
             }
             return Utility.ResultBody(200, null, actionMap);
         } else {

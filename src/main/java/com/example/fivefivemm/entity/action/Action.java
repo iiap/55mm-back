@@ -42,6 +42,8 @@ public class Action {
     @Column(nullable = false)
     private Integer cost;
 
+    private Integer collect;
+
     @OneToMany(fetch = FetchType.LAZY, targetEntity = ActionWatch.class, mappedBy = "action", cascade = CascadeType.REMOVE)
     private Set<ActionWatch> actionWatches;
 
@@ -54,11 +56,13 @@ public class Action {
 
     public Action(Integer actionId) {
         this.actionId = actionId;
+        this.collect = 0;
     }
 
     public Action(User author, Integer actionId) {
         this.author = author;
         this.actionId = actionId;
+        this.collect = 0;
     }
 
     public Action(User author, String title, String address, Integer cost, String content) {
@@ -67,6 +71,7 @@ public class Action {
         this.address = address;
         this.cost = cost;
         this.content = content;
+        this.collect = 0;
     }
 
     public Integer getActionId() {
@@ -131,6 +136,14 @@ public class Action {
 
     public void setActionWatches(Set<ActionWatch> actionWatches) {
         this.actionWatches = actionWatches;
+    }
+
+    public Integer getCollect() {
+        return collect;
+    }
+
+    public void setCollect(Integer collect) {
+        this.collect = collect;
     }
 
     @Override

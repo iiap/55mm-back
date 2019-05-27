@@ -67,6 +67,6 @@ public class UserControllerTest {
 
     @Test
     public void retrieveOtherInformationTest() {
-        System.out.println(userController.retrieveOtherInformation(1));
+        System.out.println(userController.retrieveOtherInformation(2, 2));
     }
 }
